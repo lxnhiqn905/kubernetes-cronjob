@@ -1,0 +1,30 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  name: count-date-job
+spec:
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+      name: count-date-job
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - image: count-date-app
+            imagePullPolicy: IfNotPresent
+            name: count-date-job
+            resources: {}
+            volumeMounts:
+                - name: count-date-data
+                  mountPath: "/usr/src/app/data"
+          restartPolicy: OnFailure
+          volumes:
+            - name: count-date-data
+              persistentVolumeClaim:
+                claimName: count-date-data-runtime-volume
+  schedule: '*/5 * * * *'
+status: {}
